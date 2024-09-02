@@ -58,6 +58,7 @@ export class ProductComponent implements OnInit{
       next: (res) => {
         console.log(res);
         this._ToastrService.success(res.message, 'FreshCart');
+        this._CartService.cartNumber.next(res.numOfCartItems)
       }
     });
   }
