@@ -5,6 +5,8 @@ import { CarouselModule, OwlOptions } from 'ngx-owl-carousel-o';
 import { NgFor } from '@angular/common';
 import { IProduct } from '../../core/interface/iproduct';
 import { WishlistService } from '../../core/service/wishlist.service';
+import { CartService } from '../../core/service/cart.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-details',
@@ -17,6 +19,8 @@ export class DetailsComponent implements OnInit{
   private readonly _ActivatedRoute=inject(ActivatedRoute);
   private readonly _ProductService=inject(ProductService);
   private readonly _WishlistService=inject(WishlistService);
+  private readonly _CartService=inject(CartService);
+  private readonly _ToastrService=inject(ToastrService)
 
 
   customOptionsDetails: OwlOptions = {
@@ -63,6 +67,18 @@ export class DetailsComponent implements OnInit{
             }
           });
         }
+      }
+    });
+  }
+
+  addCart(id: string): void {
+    this._CartService.addProductToCart(id).subscribe({
+      next: (res) => {
+        console.log(res);
+        this._ToastrService.success(res.message, 'FreshCart');
+        this._CartService.cartNumber.next(res.numOfCartItems)
+        console.log(this._CartService.cartNumber);
+        
       }
     });
   }
